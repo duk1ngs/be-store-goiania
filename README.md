@@ -32,13 +32,13 @@ O site não implementa checkout, rastreamento, coleta de dados ou integração d
 
 ## GitHub Pages
 
-O workflow `.github/workflows/deploy-pages.yml` gera uma exportação estática e publica o site no GitHub Pages a cada envio para `main`. O build configura automaticamente o subdiretório do repositório, os caminhos dos assets e a URL canônica da prévia.
+O workflow `.github/workflows/deploy-pages.yml` gera uma exportação estática e publica o site no GitHub Pages a cada envio para `main`. O build configura automaticamente o subdiretório do repositório e os caminhos dos assets. A prévia usa `noindex` e bloqueia rastreadores em `robots.txt`; o endereço não é divulgado, mas continua tecnicamente público para quem o possuir.
 
 Para testar a mesma exportação localmente:
 
 ```sh
 STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/be-store-goiania \
-SITE_URL=https://usuario.github.io SITE_BASE_PATH=/be-store-goiania \
+SITE_BASE_PATH=/be-store-goiania \
 npm run build:pages
 ```
 
