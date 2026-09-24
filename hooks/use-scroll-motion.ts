@@ -1,0 +1,111 @@
+"use client";
+
+import { useEffect } from "react";
+
+type RevealDirection = "up" | "left" | "right" | "fade" | "scale";
+
+const revealStart: Record<RevealDirection, Keyframe> = {
+  up: { opacity: 0, transform: "translate3d(0, 30px, 0)" },
+  left: { opacity: 0, transform: "translate3d(-44px, 0, 0)" },
+  right: { opacity: 0, transform: "translate3d(44px, 0, 0)" },
+  fade: { opacity: 0 },
+  scale: { opacity: 0, transform: "translate3d(0, 14px, 0) scale(.965)" },
+};
+
+function directionFor(element: HTMLElement, index: number): RevealDirection {
+  const requested = element.dataset.reveal as RevealDirection | undefined;
+  if (requested && requested in revealStart) return requested;
+  return index % 3 === 1 ? "left" : index % 3 === 2 ? "right" : "up";
+}
+
+export function useScrollMotion() {
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reducedMotion.matches || !("IntersectionObserver" in window)) return;
+
+    let revealObserver: IntersectionObserver | null = null;
+    let frame = 0;
+    let started = false;
+
+    const animateItems = (container: Element, selector: string, stagger = 96) => {
+      container.querySelectorAll<HTMLElement>(selector).forEach((element, index) => {
+        if (element.dataset.motionComplete) return;
+        element.dataset.motionComplete = "true";
+        const direction = directionFor(element, index);
+        element.animate(
+          [revealStart[direction], { opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" }],
+          {
+            duration: 700,
+            delay: index * stagger,
+            easing: "cubic-bezier(.22,.68,0,1)",
+            fill: "backwards",
+          },
+        );
+      });
+    };
+
+    const scrollElements = [...document.querySelectorAll<HTMLElement>("[data-scroll-motion]")];
+    const updateScrollMotion = () => {
+      frame = 0;
+      const viewportHeight = window.innerHeight || 1;
+      scrollElements.forEach((element) => {
+        const rect = element.getBoundingClientRect();
+        if (rect.bottom < -viewportHeight * 0.25 || rect.top > viewportHeight * 1.25) return;
+        const progress = Math.min(1, Math.max(0, (viewportHeight - rect.top) / (viewportHeight + rect.height)));
+        const range = Math.min(48, Math.max(0, Number(element.dataset.scrollMotion) || 20));
+        const shift = (progress - 0.5) * range * 2;
+        element.style.setProperty("--scroll-shift", `${shift.toFixed(2)}px`);
+        element.style.setProperty("--scroll-progress", progress.toFixed(3));
+      });
+    };
+    const requestUpdate = () => {
+      if (!frame) frame = requestAnimationFrame(updateScrollMotion);
+    };
+
+    const startMotion = () => {
+      if (started || reducedMotion.matches) return;
+      started = true;
+
+      const hero = document.querySelector("[data-hero-group]");
+      if (hero) animateItems(hero, "[data-motion-item]", 105);
+      document.querySelector<HTMLElement>("[data-hero-visual]")?.animate(
+        [
+          { opacity: 0, transform: "translate3d(32px, 18px, 0) scale(.975)" },
+          { opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" },
+        ],
+        { duration: 780, delay: 180, easing: "cubic-bezier(.22,.68,0,1)", fill: "backwards" },
+      );
+
+      revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting || reducedMotion.matches) return;
+            const stagger = Number((entry.target as HTMLElement).dataset.stagger || 96);
+            animateItems(entry.target, "[data-reveal-item]", stagger);
+            revealObserver?.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.14, rootMargin: "0px 0px -8%" },
+      );
+
+      document.querySelectorAll("[data-reveal-group]").forEach((element) => revealObserver?.observe(element));
+      window.addEventListener("scroll", requestUpdate, { passive: true });
+      window.addEventListener("resize", requestUpdate, { passive: true });
+      updateScrollMotion();
+    };
+
+    if (document.documentElement.dataset.introActive === "true") {
+      window.addEventListener("be-store:intro-complete", startMotion, { once: true });
+    } else {
+      startMotion();
+    }
+
+    return () => {
+      revealObserver?.disconnect();
+      window.removeEventListener("be-store:intro-complete", startMotion);
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+}

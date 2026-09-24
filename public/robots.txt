@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+# Previa privada: dominio oficial ainda nao configurado.
