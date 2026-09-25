@@ -71,10 +71,10 @@ const FRAGMENT_SHADER = `
     float grid = clamp(step(1.0 - thickness, gridCell.x) + step(1.0 - thickness, gridCell.y), 0.0, 1.0) * 0.045;
 
     vec2 drift = vec2(
-      sin(st.y * 3.4 + u_time * 0.09),
-      cos(st.x * 3.1 - u_time * 0.075)
+      sin(st.y * 3.4 + u_time * 0.15),
+      cos(st.x * 3.1 - u_time * 0.12)
     ) * 0.035;
-    vec2 noisePosition = (st + drift) * (1.35 * u_length) + vec2(u_time * 0.014, u_time * 0.022);
+    vec2 noisePosition = (st + drift) * (1.35 * u_length) + vec2(u_time * 0.026, u_time * 0.034);
     float noise = snoise(noisePosition) * 0.5 + 0.5;
     float triangleWave = abs(fract(noise * (9.0 * u_density)) - 0.5) * 2.0;
     float contour = smoothstep(0.045, 0.0, triangleWave) * 0.24;

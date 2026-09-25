@@ -35,7 +35,6 @@ export function SiteIntro({ onComplete }: { onComplete: (name: string) => void }
       unlockPage();
       setPhase("hidden");
       onComplete(visitorName);
-      requestAnimationFrame(announceComplete);
     };
     const beginExit = (visitorName: string) => {
       if (finishing) return;
@@ -47,7 +46,8 @@ export function SiteIntro({ onComplete }: { onComplete: (name: string) => void }
       }
       onComplete(visitorName);
       setPhase("leaving");
-      timers.push(window.setTimeout(() => finish(visitorName), reducedMotion.matches ? 160 : 880));
+      requestAnimationFrame(announceComplete);
+      timers.push(window.setTimeout(() => finish(visitorName), reducedMotion.matches ? 160 : 720));
     };
     finishRef.current = beginExit;
 

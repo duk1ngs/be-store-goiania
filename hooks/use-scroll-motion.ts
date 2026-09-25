@@ -49,7 +49,7 @@ export function useScrollMotion() {
         });
     };
 
-    const animateItems = (container: Element, selector: string, stagger = 125) => {
+    const animateItems = (container: Element, selector: string, stagger = 105) => {
       container.querySelectorAll<HTMLElement>(selector).forEach((element, index) => {
         if (element.dataset.motionComplete) return;
         element.dataset.motionComplete = "true";
@@ -62,7 +62,7 @@ export function useScrollMotion() {
         const animation = element.animate(
           [start, { opacity: 1, transform: reducedMotion.matches ? "none" : "translate3d(0, 0, 0) scale(1)" }],
           {
-            duration: reducedMotion.matches ? 160 : 880,
+            duration: reducedMotion.matches ? 160 : 760,
             delay: reducedMotion.matches ? index * 24 : index * stagger,
             easing: reducedMotion.matches ? "linear" : "cubic-bezier(.22,.68,0,1)",
             fill: "backwards",
@@ -100,7 +100,7 @@ export function useScrollMotion() {
       started = true;
 
       const hero = document.querySelector("[data-hero-group]");
-      if (hero) animateItems(hero, "[data-motion-item]", 130);
+      if (hero) animateItems(hero, "[data-motion-item]", 105);
       const heroVisual = document.querySelector<HTMLElement>("[data-hero-visual]");
       if (heroVisual) {
         const animation = heroVisual.animate(
@@ -108,7 +108,7 @@ export function useScrollMotion() {
             { opacity: 0, transform: "translate3d(32px, 18px, 0) scale(.975)" },
             { opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" },
           ],
-          { duration: 980, delay: 220, easing: "cubic-bezier(.22,.68,0,1)", fill: "backwards" },
+          { duration: 860, delay: 140, easing: "cubic-bezier(.22,.68,0,1)", fill: "backwards" },
         );
         runningAnimations.push(animation);
       }
@@ -122,7 +122,7 @@ export function useScrollMotion() {
         (entries) => {
           entries.forEach((entry) => {
             if (!entry.isIntersecting || reducedMotion.matches) return;
-            const stagger = Number((entry.target as HTMLElement).dataset.stagger || 125);
+            const stagger = Number((entry.target as HTMLElement).dataset.stagger || 105);
             animateItems(entry.target, "[data-reveal-item]", stagger);
             revealObserver?.unobserve(entry.target);
           });

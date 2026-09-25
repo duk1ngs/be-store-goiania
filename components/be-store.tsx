@@ -76,7 +76,7 @@ export default function BeStore() {
   const currentImage=galleryIndex===null?null:gallery[galleryIndex];
 
   return <>
-    <TopoField className="global-fluid-field" mode="dark" speed={0.58} length={1.08} density={1.15} opacity={0.9} saturation={0} brightness={0.92} />
+    <TopoField className="global-fluid-field" mode="dark" speed={0.76} length={1.08} density={1.15} opacity={0.9} saturation={0} brightness={0.92} />
     <SiteIntro onComplete={handleIntroComplete} />
     <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
     <div className="announcement"><span>De Goiânia para todo o Brasil</span><span>Em até 18x no cartão*</span></div>
@@ -99,10 +99,9 @@ export default function BeStore() {
         <div className="hero-copy" data-hero-group><p className="eyebrow" data-motion-item data-reveal="fade">{visitorName?`Bem-vindo, ${visitorName}.`:"Be Store Goiânia"}</p><h1 id="hero-title" aria-label="Seu próximo upgrade."><span className="title-mask"><span data-motion-item data-reveal="up">Seu próximo</span></span><span className="title-mask"><em data-motion-item data-reveal="up">upgrade.</em></span></h1><p className="hero-description" data-motion-item data-reveal="up">Novas possibilidades começam com a escolha certa. Encontre o iPhone que combina com você.</p><div data-motion-item data-reveal="up"><WhatsAppLink href={generalWhatsApp} className="button button-light">Encontre seu iPhone <ArrowUpRight size={20}/></WhatsAppLink><a className="explore-link" href="#selecao">Explore a seleção <ArrowDown size={16}/></a></div></div>
         <figure className="hero-visual" data-hero-visual data-scroll-motion="28">
           <picture>
-            <source media="(max-width: 640px)" srcSet={`${siteAsset("/images/iphones-studio-mobile-640.webp")} 640w, ${siteAsset("/images/iphones-studio-mobile.webp")} 1122w`} sizes="100vw" />
-            <img src={siteAsset("/images/iphones-studio.webp")} srcSet={`${siteAsset("/images/iphones-studio-960.webp")} 960w, ${siteAsset("/images/iphones-studio.webp")} 1672w`} sizes="(max-width: 1000px) 54vw, 660px" alt="Composição visual com três iPhones prateados da loja sobre fundo preto" width="1672" height="941" loading="eager" fetchPriority="high" />
+            <img src={siteAsset("/images/hero-iphone-18-pro-max.webp")} srcSet={`${siteAsset("/images/hero-iphone-18-pro-max-640.webp")} 640w, ${siteAsset("/images/hero-iphone-18-pro-max.webp")} 1024w`} sizes="(max-width: 640px) 100vw, (max-width: 1000px) 54vw, 660px" alt="Conceito visual de iPhone 18 Pro Max em acabamento dark gray sobre fundo preto" width="1024" height="1536" loading="eager" fetchPriority="high" />
           </picture>
-          <figcaption>Composição visual criada a partir de foto fornecida pela loja.</figcaption>
+          <figcaption>Conceito visual fornecido; modelo e disponibilidade são confirmados pela equipe.</figcaption>
         </figure>
         <div className="hero-bottom"><span>Tecnologia para o que vem a seguir.</span><span>Goiânia, GO / Brasil</span></div>
       </section>

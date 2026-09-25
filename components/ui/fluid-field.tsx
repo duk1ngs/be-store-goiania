@@ -67,11 +67,11 @@ const FRAGMENT_SHADER = `
     uv.x *= u_resolution.x / u_resolution.y;
 
     vec2 flow = uv * 0.82;
-    float slowTime = u_time * 0.055;
+    float slowTime = u_time * 0.088;
     flow += vec2(snoise(flow + slowTime), snoise(flow - slowTime)) * 0.27;
 
-    float primary = snoise(vec2(flow.x + flow.y * 1.35 - u_time * 0.11, u_time * 0.018));
-    float secondary = snoise(flow * 1.65 + vec2(u_time * 0.035, -u_time * 0.025));
+    float primary = snoise(vec2(flow.x + flow.y * 1.35 - u_time * 0.16, u_time * 0.032));
+    float secondary = snoise(flow * 1.65 + vec2(u_time * 0.055, -u_time * 0.042));
     float beam = smoothstep(0.08, 0.82, primary * 0.72 + secondary * 0.28);
     float vignette = smoothstep(1.08, 0.18, distance(gl_FragCoord.xy / u_resolution.xy, vec2(0.5)));
     float field = beam * (0.54 + vignette * 0.46);
