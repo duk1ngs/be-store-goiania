@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { BorderBeam } from "@/components/ui/border-beam";
 import FluidFieldBackground from "@/components/ui/fluid-field";
 import { ShinyButton } from "@/components/ui/shiny-button";
 import { siteAsset } from "@/lib/site-path";
@@ -129,6 +130,7 @@ export function SiteIntro({ onComplete }: { onComplete: (name: string) => void }
             <ShinyButton type="submit" aria-label="Entrar no site">
               Entrar <ArrowRight size={18} />
             </ShinyButton>
+            <BorderBeam duration={5.2} size={28} />
           </div>
           <p className="site-intro-greeting" aria-live="polite">
             {normalizeVisitorName(name) ? `Olá, ${normalizeVisitorName(name)}.` : "Uma experiência preparada para você."}
