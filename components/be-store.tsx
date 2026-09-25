@@ -16,7 +16,7 @@ const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 const navigation = [{href:"#selecao",label:"A seleção"},{href:"#sobre",label:"A Be Store"},{href:"#instagram",label:"Instagram"},{href:"#contato",label:"Visite a loja"}];
 
 function Logo() {
-  return <a className="logo-window" href="#inicio" aria-label="Be Store Goiânia, início"><img src={siteAsset("/images/be-store-logo.jpg")} alt="Be Store" width="150" height="150"/></a>;
+  return <a className="logo-window" href="#inicio" aria-label="Be Store Goiânia, início"><img src={siteAsset("/images/be-store-logo.svg")} alt="Be Store" width="150" height="150"/></a>;
 }
 function WhatsAppLink({children,className="",label}:{children:React.ReactNode;className?:string;label?:string}) {
   return <a className={className} href={business.whatsapp} aria-label={label} {...external}>{children}</a>;

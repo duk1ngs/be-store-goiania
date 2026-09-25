@@ -39,7 +39,7 @@ export function FooterSection() {
       <div className="wrap site-footer-inner">
         <div className="site-footer-lead" data-reveal-item data-reveal="left">
           <a className="footer-logo" href="#inicio" aria-label="Be Store Goiânia, início">
-            <img src={siteAsset("/images/be-store-logo.jpg")} alt="Be Store" width="150" height="150" />
+            <img src={siteAsset("/images/be-store-logo.svg")} alt="Be Store" width="150" height="150" />
           </a>
           <p className="eyebrow">Be Store Goiânia</p>
           <h2>Seu próximo upgrade<br />começa com uma conversa.</h2>

@@ -77,7 +77,14 @@ const FRAGMENT_SHADER = `
     float vignette = smoothstep(0.95, 0.18, distance(st / vec2(u_resolution.x / u_resolution.y, 1.0), vec2(0.5)));
     float lines = (grid + contour) * (0.55 + vignette * 0.45);
 
-    vec3 darkColor = vec3(0.002) + vec3(lines);
+    vec2 normalized = st / vec2(u_resolution.x / u_resolution.y, 1.0);
+    vec2 glowAOrigin = vec2(0.18 + sin(u_time * 0.13) * 0.08, 0.22 + cos(u_time * 0.11) * 0.06);
+    vec2 glowBOrigin = vec2(0.82 + cos(u_time * 0.09) * 0.07, 0.72 + sin(u_time * 0.12) * 0.08);
+    float glowA = exp(-distance(normalized, glowAOrigin) * 4.8);
+    float glowB = exp(-distance(normalized, glowBOrigin) * 5.4);
+    float ambientGlow = (glowA * 0.028) + (glowB * 0.02);
+
+    vec3 darkColor = vec3(0.002 + ambientGlow) + vec3(lines);
     vec3 lightColor = vec3(0.965) - vec3(lines * 0.72);
     gl_FragColor = vec4(mix(darkColor, lightColor, u_light_mode), 1.0);
   }
