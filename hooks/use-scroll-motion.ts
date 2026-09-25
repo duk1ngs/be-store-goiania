@@ -49,7 +49,7 @@ export function useScrollMotion() {
         });
     };
 
-    const animateItems = (container: Element, selector: string, stagger = 105) => {
+    const animateItems = (container: Element, selector: string, stagger = 120, duration = 1040) => {
       container.querySelectorAll<HTMLElement>(selector).forEach((element, index) => {
         if (element.dataset.motionComplete) return;
         element.dataset.motionComplete = "true";
@@ -62,7 +62,7 @@ export function useScrollMotion() {
         const animation = element.animate(
           [start, { opacity: 1, transform: reducedMotion.matches ? "none" : "translate3d(0, 0, 0) scale(1)" }],
           {
-            duration: reducedMotion.matches ? 160 : 760,
+            duration: reducedMotion.matches ? 160 : duration,
             delay: reducedMotion.matches ? index * 24 : index * stagger,
             easing: reducedMotion.matches ? "linear" : "cubic-bezier(.22,.68,0,1)",
             fill: "backwards",
@@ -100,7 +100,7 @@ export function useScrollMotion() {
       started = true;
 
       const hero = document.querySelector("[data-hero-group]");
-      if (hero) animateItems(hero, "[data-motion-item]", 105);
+      if (hero) animateItems(hero, "[data-motion-item]", 105, 820);
       const heroVisual = document.querySelector<HTMLElement>("[data-hero-visual]");
       if (heroVisual) {
         const animation = heroVisual.animate(

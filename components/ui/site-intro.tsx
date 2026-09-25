@@ -49,7 +49,7 @@ export function SiteIntro({ onComplete }: { onComplete: (name: string) => void }
       onComplete(visitorName);
       setPhase("leaving");
       requestAnimationFrame(announceComplete);
-      timers.push(window.setTimeout(() => finish(visitorName), reducedMotion.matches ? 160 : 720));
+      timers.push(window.setTimeout(() => finish(visitorName), reducedMotion.matches ? 140 : 560));
     };
     finishRef.current = beginExit;
 
@@ -98,7 +98,7 @@ export function SiteIntro({ onComplete }: { onComplete: (name: string) => void }
       aria-modal="true"
       aria-label="Introdução da Be Store Goiânia"
     >
-      <FluidFieldBackground className="intro-fluid-field" mode="dark" brightness={0.82} />
+      <FluidFieldBackground className="intro-fluid-field" mode="dark" brightness={1.04} />
       <div className="site-intro-panel site-intro-panel-left" aria-hidden="true" />
       <div className="site-intro-panel site-intro-panel-right" aria-hidden="true" />
       <div className="site-intro-content">
