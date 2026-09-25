@@ -18,8 +18,7 @@ export interface Product {
   description: string;
   illustrative: boolean;
 }
-// Referências visuais, não SKUs, ofertas ou confirmação de estoque.
-// Substitua por dados fornecidos e confirmados pela loja antes de anunciar produtos.
+// A disponibilidade comercial deve ser confirmada pela loja antes de anunciar produtos.
 export const catalog: Product[] = [
   {
     id: "iphone-18-pro-reference",
@@ -27,9 +26,9 @@ export const catalog: Product[] = [
     name: "iPhone 18 Pro",
     model: "iPhone 18 Pro", storage: null, color: null, condition: null, price: null,
     availability: "a-confirmar", illustrative: true,
-    description: "Uma referência visual enviada para a Be Store. Consulte a equipe para confirmar modelo, cores, lançamento e disponibilidade.",
+    description: "Quatro acabamentos em uma composição limpa e sofisticada. Consulte a equipe para confirmar modelo, lançamento e disponibilidade.",
     images: [
-      { src: "/images/iphone-18-pro-reference.png", alt: "Referência visual de quatro aparelhos em acabamentos escuro, claro, vinho e azul", caption: "Conceito visual fornecido; modelo, cores e disponibilidade não confirmados." }
+      { src: "/images/iphone-18-pro-reference.webp", alt: "Quatro aparelhos em acabamentos dark gray, prata, dark cherry e azul claro sobre fundo preto", caption: "" }
     ],
   },
   {
@@ -40,8 +39,7 @@ export const catalog: Product[] = [
     availability: "a-confirmar", illustrative: true,
     description: "Para registrar, criar e estar perto. Converse com a equipe e encontre o modelo que faz sentido para a sua rotina.",
     images: [
-      { src: "/images/iphones.webp", alt: "Três iPhones prateados apresentados na mão, em ambiente da loja", caption: "Imagem editorial preparada a partir de foto fornecida pela loja.", original: "/images/iphones-original.webp" },
-      { src: "/images/iphones-original.webp", alt: "Foto original dos três iPhones", caption: "Foto original fornecida pela loja." }
+      { src: "/images/iphones.webp", alt: "Três iPhones prateados apresentados na mão, em ambiente da loja", caption: "" }
     ],
   },
   {
@@ -52,8 +50,7 @@ export const catalog: Product[] = [
     availability: "a-confirmar", illustrative: true,
     description: "Trabalho, estudo e criatividade em novas possibilidades. Consulte a equipe sobre iPads e acessórios.",
     images: [
-      { src: "/images/ipad.webp", alt: "Tablet com teclado preto sobre mesa clara, ao lado de uma planta", caption: "Imagem editorial preparada a partir de foto fornecida pela loja.", original: "/images/ipad-original.webp" },
-      { src: "/images/ipad-original.webp", alt: "Foto original do tablet com teclado ao lado da planta", caption: "Foto original fornecida pela loja." }
+      { src: "/images/ipad.webp", alt: "Tablet com teclado preto sobre mesa clara, ao lado de uma planta", caption: "" }
     ],
   },
 ];

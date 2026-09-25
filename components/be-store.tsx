@@ -7,6 +7,8 @@ import { Sheet, SheetTrigger, SheetContent, SheetTitle, SheetDescription, SheetC
 import { FooterSection } from "@/components/ui/footer-section";
 import { SiteIntro } from "@/components/ui/site-intro";
 import TopoField from "@/components/ui/topo-field";
+import { BorderBeam } from "@/components/ui/border-beam";
+import { ShinyButton } from "@/components/ui/shiny-button";
 import { useScrollMotion } from "@/hooks/use-scroll-motion";
 import { business } from "@/lib/business";
 import { catalog, gallery, type Product } from "@/lib/catalog";
@@ -25,15 +27,14 @@ function WhatsAppLink({children,href,className="",label}:{children:React.ReactNo
 function ResponsivePhoto({src,alt,className="",priority=false}:{src:string;alt:string;className?:string;priority?:boolean}) {
   const resolved=siteAsset(src);
   const sourceSet=src.endsWith(".webp")?siteAsset(src.replace(".webp","-640.webp"))+" 640w, "+resolved+" 1200w":undefined;
-  return <img className={className} src={resolved} srcSet={sourceSet} sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 600px" alt={alt} width="1200" height="1500" loading={priority?"eager":"lazy"} fetchPriority={priority?"high":"auto"}/>;
+  const landscape=src.includes("iphone-18-pro-reference");
+  return <img className={className} src={resolved} srcSet={sourceSet} sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 600px" alt={alt} width={landscape?1792:1200} height={landscape?1024:1500} loading={priority?"eager":"lazy"} fetchPriority={priority?"high":"auto"}/>;
 }
 
 export default function BeStore() {
   const [menuOpen,setMenuOpen]=useState(false);
   const [selectedProduct,setSelectedProduct]=useState<Product|null>(null);
-  const [productPhoto,setProductPhoto]=useState(0);
   const [galleryIndex,setGalleryIndex]=useState<number|null>(null);
-  const [showOriginal,setShowOriginal]=useState(false);
   const [activeSection,setActiveSection]=useState("inicio");
   const [visitorName,setVisitorName]=useState("");
   const lastTrigger=useRef<HTMLButtonElement|null>(null);
@@ -69,9 +70,9 @@ export default function BeStore() {
     return ()=>observer.disconnect();
   },[]);
 
-  const openProduct=(product:Product,button:HTMLButtonElement)=>{lastTrigger.current=button;setProductPhoto(0);setSelectedProduct(product);};
-  const openGallery=(index:number,button:HTMLButtonElement)=>{lastTrigger.current=button;setShowOriginal(false);setGalleryIndex(index);};
-  const moveGallery=(step:number)=>{setShowOriginal(false);setGalleryIndex(index=>index===null?null:(index+step+gallery.length)%gallery.length);};
+  const openProduct=(product:Product,button:HTMLButtonElement)=>{lastTrigger.current=button;setSelectedProduct(product);};
+  const openGallery=(index:number,button:HTMLButtonElement)=>{lastTrigger.current=button;setGalleryIndex(index);};
+  const moveGallery=(step:number)=>{setGalleryIndex(index=>index===null?null:(index+step+gallery.length)%gallery.length);};
   const restoreFocus=(event:Event)=>{event.preventDefault();lastTrigger.current?.focus();};
   const currentImage=galleryIndex===null?null:gallery[galleryIndex];
 
@@ -96,12 +97,11 @@ export default function BeStore() {
 
     <main id="conteudo" tabIndex={-1}>
       <section className="hero wrap" id="inicio" aria-labelledby="hero-title">
-        <div className="hero-copy" data-hero-group><p className="eyebrow" data-motion-item data-reveal="fade">{visitorName?`Bem-vindo, ${visitorName}.`:"Be Store Goiânia"}</p><h1 id="hero-title" aria-label="Seu próximo upgrade."><span className="title-mask"><span data-motion-item data-reveal="up">Seu próximo</span></span><span className="title-mask"><em data-motion-item data-reveal="up">upgrade.</em></span></h1><p className="hero-description" data-motion-item data-reveal="up">Novas possibilidades começam com a escolha certa. Encontre o iPhone que combina com você.</p><div data-motion-item data-reveal="up"><WhatsAppLink href={generalWhatsApp} className="button button-light">Encontre seu iPhone <ArrowUpRight size={20}/></WhatsAppLink><a className="explore-link" href="#selecao">Explore a seleção <ArrowDown size={16}/></a></div></div>
+        <div className="hero-copy" data-hero-group><p className="eyebrow" data-motion-item data-reveal="fade">{visitorName?`Bem-vindo, ${visitorName}.`:"Be Store Goiânia"}</p><h1 id="hero-title" aria-label="Seu próximo upgrade."><span className="title-mask"><span data-motion-item data-reveal="up">Seu próximo</span></span><span className="title-mask"><em data-motion-item data-reveal="up">upgrade.</em></span></h1><p className="hero-description" data-motion-item data-reveal="up">Novas possibilidades começam com a escolha certa. Encontre o iPhone que combina com você.</p><div data-motion-item data-reveal="up"><ShinyButton asChild><WhatsAppLink href={generalWhatsApp} className="button button-light">Encontre seu iPhone <ArrowUpRight size={20}/></WhatsAppLink></ShinyButton><a className="explore-link" href="#selecao">Explore a seleção <ArrowDown size={16}/></a></div></div>
         <figure className="hero-visual" data-hero-visual data-scroll-motion="28">
           <picture>
-            <img src={siteAsset("/images/hero-iphone-18-pro-max.webp")} srcSet={`${siteAsset("/images/hero-iphone-18-pro-max-640.webp")} 640w, ${siteAsset("/images/hero-iphone-18-pro-max.webp")} 1024w`} sizes="(max-width: 640px) 100vw, (max-width: 1000px) 54vw, 660px" alt="Conceito visual de iPhone 18 Pro Max em acabamento dark gray sobre fundo preto" width="1024" height="1536" loading="eager" fetchPriority="high" />
+            <img src={siteAsset("/images/hero-iphone-18-pro-max.webp")} srcSet={`${siteAsset("/images/hero-iphone-18-pro-max-640.webp")} 640w, ${siteAsset("/images/hero-iphone-18-pro-max.webp")} 1024w`} sizes="(max-width: 640px) 100vw, (max-width: 1000px) 54vw, 660px" alt="iPhone 18 Pro Max em acabamento dark gray sobre fundo preto" width="1024" height="1536" loading="eager" fetchPriority="high" />
           </picture>
-          <figcaption>Conceito visual fornecido; modelo e disponibilidade são confirmados pela equipe.</figcaption>
         </figure>
         <div className="hero-bottom"><span>Tecnologia para o que vem a seguir.</span><span>Goiânia, GO / Brasil</span></div>
       </section>
@@ -116,8 +116,9 @@ export default function BeStore() {
         <div className="wrap">
           <div className="section-heading heading-split" data-reveal-group><div data-reveal-item data-reveal="left"><p className="eyebrow">A seleção Be Store</p><h2>O que move<br/>o seu dia?</h2></div><p data-reveal-item data-reveal="right">Para se conectar, criar ou ir mais longe.<br/>A gente ajuda você a escolher.</p></div>
           <div className="product-grid" data-reveal-group data-stagger="130">{catalog.map((product,index)=><article className={`product-card product-${index}${index===0?" product-card-featured":""}`} key={product.id} data-reveal-item data-reveal={index===0?"up":index%2?"left":"right"}>
-            <button className="product-photo" onClick={event=>openProduct(product,event.currentTarget)} aria-label={"Ver detalhes: "+product.label}><ResponsivePhoto src={product.images[0].src} alt={product.images[0].alt}/><span className="photo-label">{index===0?"Referência visual · consulte a equipe":product.label}</span><span className="photo-expand"><Plus size={24}/></span></button>
-            <div className="product-info"><div><p className="product-status">{index===0?"Novo conceito na seleção":product.illustrative?"Seleção ilustrativa":product.availability==="disponivel"?"Disponível para consulta":"Consulte disponibilidade"}</p><h3>{product.name}</h3><p>{product.description}</p></div><a className="text-button" href={productWhatsApp(product)} {...external}>Conhecer possibilidades <ArrowUpRight size={19}/></a></div>
+            <button className="product-photo" onClick={event=>openProduct(product,event.currentTarget)} aria-label={"Ver detalhes: "+product.label}><ResponsivePhoto src={product.images[0].src} alt={product.images[0].alt}/><span className="photo-expand"><Plus size={24}/></span></button>
+            <div className="product-info"><div><p className="product-status">{index===0?"Destaque da seleção":product.availability==="disponivel"?"Disponível para consulta":"Consulte disponibilidade"}</p><h3>{product.name}</h3><p>{product.description}</p></div><a className="text-button" href={productWhatsApp(product)} {...external}>Conhecer possibilidades <ArrowUpRight size={19}/></a></div>
+            {index===0&&<BorderBeam/>}
           </article>)}</div>
           <div className="catalog-note"><span>Modelos, cores, valores e disponibilidade são confirmados no atendimento.</span><WhatsAppLink href={generalWhatsApp}>Consultar a equipe <ArrowUpRight size={17}/></WhatsAppLink></div>
         </div>
@@ -133,10 +134,10 @@ export default function BeStore() {
       <section className="social light-section" id="instagram" tabIndex={-1}><div className="wrap">
         <div className="section-heading heading-split" data-reveal-group><div data-reveal-item data-reveal="left"><p className="eyebrow">Nosso universo, mais de perto</p><h2>A próxima novidade<br/>está no seu feed.</h2></div><div className="social-copy" data-reveal-item data-reveal="right"><p>As promoções e novidades da Be Store são divulgadas no Instagram. Acompanhe para ficar por dentro.</p><a className="text-link" href={business.instagram} {...external}><Instagram size={20}/>{business.instagramHandle}<ArrowUpRight size={18}/></a></div></div>
         <div className="gallery-grid" data-reveal-group data-stagger="105">{gallery.slice(0,3).map((image,index)=><button key={image.src} className={"gallery-tile gallery-tile-"+index} onClick={event=>openGallery(index,event.currentTarget)} aria-label={"Ampliar imagem "+(index+1)+": "+image.alt} data-reveal-item data-reveal={index===0?"left":index===2?"right":"up"} data-scroll-motion={String(10+index*4)}><ResponsivePhoto src={image.src} alt={image.alt}/><span className="gallery-expand"><Expand size={20}/></span></button>)}</div>
-        <div className="gallery-footer"><p>Toque nas fotos para ampliar e ver os originais disponíveis.</p><a href={business.instagram} {...external}>Ver promoções no Instagram <ArrowUpRight size={18}/></a></div>
+        <div className="gallery-footer"><p>Toque nas fotos para ampliar.</p><a href={business.instagram} {...external}>Ver promoções no Instagram <ArrowUpRight size={18}/></a></div>
       </div></section>
 
-      <section className="contact" id="contato" tabIndex={-1}><div className="wrap contact-grid" data-reveal-group><div className="contact-copy" data-reveal-item data-reveal="left"><p className="eyebrow">Perto de você</p><h2>A gente se encontra<br/>no Bueno.</h2><p>Prefere ver de perto ou conversar primeiro?<br/>Escolha como quer falar com a gente.</p><WhatsAppLink href={generalWhatsApp} className="button button-light">Converse no WhatsApp <MessageCircle size={20}/></WhatsAppLink><span className="contact-subline">Combine sua visita com a nossa equipe.</span></div><div className="contact-details" data-reveal-item data-reveal="right" data-scroll-motion="16"><div className="location-heading"><MapPin size={27} strokeWidth={1.3}/><span>Be Store Goiânia</span></div><address>{business.address}<br/>{business.city}<br/><span>CEP {business.postalCode}</span></address><a className="text-link" href={business.maps} {...external}>Abrir no Google Maps <ArrowUpRight size={20}/></a><div className="contact-bottom"><a href={business.phoneHref}><Phone size={17}/>{business.phone}</a><a href={business.instagram} {...external}><Instagram size={18}/>{business.instagramHandle}</a></div></div></div></section>
+      <section className="contact" id="contato" tabIndex={-1}><div className="wrap contact-grid" data-reveal-group><div className="contact-copy" data-reveal-item data-reveal="left"><p className="eyebrow">Perto de você</p><h2>A gente se encontra<br/>no Bueno.</h2><p>Prefere ver de perto ou conversar primeiro?<br/>Escolha como quer falar com a gente.</p><ShinyButton asChild><WhatsAppLink href={generalWhatsApp} className="button button-light">Converse no WhatsApp <MessageCircle size={20}/></WhatsAppLink></ShinyButton><span className="contact-subline">Combine sua visita com a nossa equipe.</span></div><div className="contact-details" data-reveal-item data-reveal="right" data-scroll-motion="16"><div className="location-heading"><MapPin size={27} strokeWidth={1.3}/><span>Be Store Goiânia</span></div><address>{business.address}<br/>{business.city}<br/><span>CEP {business.postalCode}</span></address><a className="text-link" href={business.maps} {...external}>Abrir no Google Maps <ArrowUpRight size={20}/></a><div className="contact-bottom"><a href={business.phoneHref}><Phone size={17}/>{business.phone}</a><a href={business.instagram} {...external}><Instagram size={18}/>{business.instagramHandle}</a></div><BorderBeam duration={4.6}/></div></div></section>
     </main>
 
     <FooterSection whatsappHref={generalWhatsApp} />
@@ -145,7 +146,7 @@ export default function BeStore() {
     <Dialog open={selectedProduct!==null} onOpenChange={open=>{if(!open)setSelectedProduct(null);}}>
       <DialogContent className="product-dialog" showCloseButton={false} onCloseAutoFocus={restoreFocus}>
         <DialogClose asChild><button className="icon-button close-button" aria-label="Fechar detalhes"><X/></button></DialogClose>
-        {selectedProduct && <><div className={`dialog-photo${selectedProduct.id==="iphone-18-pro-reference"?" dialog-photo-contain":""}`}><img src={siteAsset(selectedProduct.images[productPhoto].src)} alt={selectedProduct.images[productPhoto].alt} width="1200" height="1500"/>{selectedProduct.images.length>1&&<div className="photo-switch">{selectedProduct.images.map((image,index)=><button key={image.src} aria-pressed={productPhoto===index} onClick={()=>setProductPhoto(index)}>{index===0?"Versão editorial":"Foto original"}</button>)}</div>}</div><div className="dialog-copy"><span className="product-status">Referência visual</span><DialogTitle className="dialog-title">{selectedProduct.name}</DialogTitle><DialogDescription className="dialog-description">{selectedProduct.description}</DialogDescription><p className="consult-text">Modelos, armazenamento, cores, condição e valores são confirmados pela equipe. As fotos não representam uma oferta ou confirmação de estoque.</p><WhatsAppLink href={productWhatsApp(selectedProduct)} className="button button-light">Consultar pelo WhatsApp <ArrowUpRight size={20}/></WhatsAppLink><p className="image-caption">{selectedProduct.images[productPhoto].caption}</p></div></>}
+        {selectedProduct && <><div className={`dialog-photo${selectedProduct.id==="iphone-18-pro-reference"?" dialog-photo-contain":""}`}><img src={siteAsset(selectedProduct.images[0].src)} alt={selectedProduct.images[0].alt} width={selectedProduct.id==="iphone-18-pro-reference"?1792:1200} height={selectedProduct.id==="iphone-18-pro-reference"?1024:1500}/></div><div className="dialog-copy"><span className="product-status">Consulte disponibilidade</span><DialogTitle className="dialog-title">{selectedProduct.name}</DialogTitle><DialogDescription className="dialog-description">{selectedProduct.description}</DialogDescription><p className="consult-text">Modelos, armazenamento, cores, condição e valores são confirmados pela equipe. As fotos não representam uma oferta ou confirmação de estoque.</p><ShinyButton asChild><WhatsAppLink href={productWhatsApp(selectedProduct)} className="button button-light">Consultar pelo WhatsApp <ArrowUpRight size={20}/></WhatsAppLink></ShinyButton></div></>}
       </DialogContent>
     </Dialog>
 
@@ -153,7 +154,7 @@ export default function BeStore() {
       <DialogContent className="gallery-dialog" showCloseButton={false} onCloseAutoFocus={restoreFocus} onKeyDown={event=>{if(event.key==="ArrowRight"){event.preventDefault();moveGallery(1);}if(event.key==="ArrowLeft"){event.preventDefault();moveGallery(-1);}}}>
         <DialogTitle className="sr-only">Galeria Be Store</DialogTitle><DialogDescription className="sr-only">Use as setas para navegar pelas imagens e Escape para fechar.</DialogDescription>
         <DialogClose asChild><button className="icon-button close-button" aria-label="Fechar galeria"><X/></button></DialogClose>
-        {currentImage && <><figure className="lightbox-figure"><img src={siteAsset(showOriginal&&currentImage.original?currentImage.original:currentImage.src)} alt={currentImage.alt} width="1200" height="1500"/>{(showOriginal||currentImage.caption)&&<figcaption aria-live="polite">{showOriginal?"Foto original fornecida pela loja.":currentImage.caption}</figcaption>}</figure><div className="gallery-controls"><button className="icon-button" onClick={()=>moveGallery(-1)} aria-label="Imagem anterior"><ArrowLeft/></button><span aria-live="polite">{(galleryIndex??0)+1} / {gallery.length}</span>{currentImage.original&&<button className="original-toggle" onClick={()=>setShowOriginal(value=>!value)}>{showOriginal?"Ver tratamento":"Ver foto original"}</button>}<button className="icon-button" onClick={()=>moveGallery(1)} aria-label="Próxima imagem"><ArrowRight/></button></div></>}
+        {currentImage && <><figure className="lightbox-figure"><img src={siteAsset(currentImage.src)} alt={currentImage.alt} width="1200" height="1500"/></figure><div className="gallery-controls"><button className="icon-button" onClick={()=>moveGallery(-1)} aria-label="Imagem anterior"><ArrowLeft/></button><span aria-live="polite">{(galleryIndex??0)+1} / {gallery.length}</span><button className="icon-button" onClick={()=>moveGallery(1)} aria-label="Próxima imagem"><ArrowRight/></button></div></>}
       </DialogContent>
     </Dialog>
   </>;

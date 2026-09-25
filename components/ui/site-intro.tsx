@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import FluidFieldBackground from "@/components/ui/fluid-field";
+import { ShinyButton } from "@/components/ui/shiny-button";
 import { siteAsset } from "@/lib/site-path";
 import { isValidVisitorName, normalizeVisitorName, VISITOR_NAME_KEY } from "@/lib/whatsapp";
 
@@ -122,9 +123,9 @@ export function SiteIntro({ onComplete }: { onComplete: (name: string) => void }
               aria-invalid={Boolean(error)}
               aria-describedby={error ? "visitor-name-error" : undefined}
             />
-            <button type="submit" aria-label="Entrar no site">
+            <ShinyButton type="submit" aria-label="Entrar no site">
               Entrar <ArrowRight size={18} />
-            </button>
+            </ShinyButton>
           </div>
           <p className="site-intro-greeting" aria-live="polite">
             {normalizeVisitorName(name) ? `Olá, ${normalizeVisitorName(name)}.` : "Uma experiência preparada para você."}
