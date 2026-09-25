@@ -86,11 +86,11 @@ export default function BeStore() {
       <Logo/>
       <nav aria-label="Navegação principal">{navigation.map(item=><a key={item.href} href={item.href} aria-current={activeSection===item.href.slice(1)?"location":undefined}>{item.label}</a>)}</nav>
       <WhatsAppLink href={generalWhatsApp} className="header-contact">Vamos conversar <ArrowUpRight size={18}/></WhatsAppLink>
-      <Sheet open={menuOpen} onOpenChange={setMenuOpen}><SheetTrigger asChild><button className="icon-button mobile-menu" aria-label="Abrir menu"><Menu size={24}/></button></SheetTrigger><SheetContent className="mobile-sheet" showCloseButton={false} onCloseAutoFocus={finishMenuNavigation}>
+      <Sheet open={menuOpen} onOpenChange={setMenuOpen}><SheetTrigger asChild><button className="icon-button mobile-menu shiny-button" aria-label="Abrir menu"><Menu size={24}/></button></SheetTrigger><SheetContent className="mobile-sheet" showCloseButton={false} onCloseAutoFocus={finishMenuNavigation}>
         <SheetTitle>Be Store Goiânia</SheetTitle><SheetDescription>Explore e fale com a gente.</SheetDescription>
-        <SheetClose asChild><button className="icon-button close-button" aria-label="Fechar menu"><X/></button></SheetClose>
+        <SheetClose asChild><button className="icon-button close-button shiny-button" aria-label="Fechar menu"><X/></button></SheetClose>
         <nav aria-label="Navegação móvel">{navigation.map(item=><a key={item.href} href={item.href} aria-current={activeSection===item.href.slice(1)?"location":undefined} onClick={event=>{event.preventDefault();navigationTarget.current=item.href;setMenuOpen(false);}}>{item.label}</a>)}</nav>
-        <WhatsAppLink href={generalWhatsApp} className="button button-light">Conversar no WhatsApp <MessageCircle size={19}/></WhatsAppLink>
+        <ShinyButton asChild><WhatsAppLink href={generalWhatsApp} className="button button-light">Conversar no WhatsApp <MessageCircle size={19}/></WhatsAppLink></ShinyButton>
       </SheetContent></Sheet>
       </div>
     </header>
@@ -116,8 +116,8 @@ export default function BeStore() {
         <div className="wrap">
           <div className="section-heading heading-split" data-reveal-group><div data-reveal-item data-reveal="left"><p className="eyebrow">A seleção Be Store</p><h2>O que move<br/>o seu dia?</h2></div><p data-reveal-item data-reveal="right">Para se conectar, criar ou ir mais longe.<br/>A gente ajuda você a escolher.</p></div>
           <div className="product-grid" data-reveal-group data-stagger="130">{catalog.map((product,index)=><article className={`product-card product-${index}${index===0?" product-card-featured":""}`} key={product.id} data-reveal-item data-reveal={index===0?"up":index%2?"left":"right"}>
-            <button className="product-photo" onClick={event=>openProduct(product,event.currentTarget)} aria-label={"Ver detalhes: "+product.label}><ResponsivePhoto src={product.images[0].src} alt={product.images[0].alt}/><span className="photo-expand"><Plus size={24}/></span></button>
-            <div className="product-info"><div><p className="product-status">{index===0?"Destaque da seleção":product.availability==="disponivel"?"Disponível para consulta":"Consulte disponibilidade"}</p><h3>{product.name}</h3><p>{product.description}</p></div><a className="text-button" href={productWhatsApp(product)} {...external}>Conhecer possibilidades <ArrowUpRight size={19}/></a></div>
+            <button className="product-photo" onClick={event=>openProduct(product,event.currentTarget)} aria-label={"Ver detalhes: "+product.label}><ResponsivePhoto src={product.images[0].src} alt={product.images[0].alt}/><span className="photo-expand shiny-action-icon"><Plus size={24}/></span></button>
+            <div className="product-info"><div><p className="product-status">{index===0?"Destaque da seleção":product.availability==="disponivel"?"Disponível para consulta":"Consulte disponibilidade"}</p><h3>{product.name}</h3><p>{product.description}</p></div><ShinyButton asChild><a className="text-button" href={productWhatsApp(product)} {...external}>Conhecer possibilidades <ArrowUpRight size={19}/></a></ShinyButton></div>
             {index===0&&<BorderBeam/>}
           </article>)}</div>
           <div className="catalog-note"><span>Modelos, cores, valores e disponibilidade são confirmados no atendimento.</span><WhatsAppLink href={generalWhatsApp}>Consultar a equipe <ArrowUpRight size={17}/></WhatsAppLink></div>
@@ -133,7 +133,7 @@ export default function BeStore() {
 
       <section className="social light-section" id="instagram" tabIndex={-1}><div className="wrap">
         <div className="section-heading heading-split" data-reveal-group><div data-reveal-item data-reveal="left"><p className="eyebrow">Nosso universo, mais de perto</p><h2>A próxima novidade<br/>está no seu feed.</h2></div><div className="social-copy" data-reveal-item data-reveal="right"><p>As promoções e novidades da Be Store são divulgadas no Instagram. Acompanhe para ficar por dentro.</p><a className="text-link" href={business.instagram} {...external}><Instagram size={20}/>{business.instagramHandle}<ArrowUpRight size={18}/></a></div></div>
-        <div className="gallery-grid" data-reveal-group data-stagger="105">{gallery.slice(0,3).map((image,index)=><button key={image.src} className={"gallery-tile gallery-tile-"+index} onClick={event=>openGallery(index,event.currentTarget)} aria-label={"Ampliar imagem "+(index+1)+": "+image.alt} data-reveal-item data-reveal={index===0?"left":index===2?"right":"up"} data-scroll-motion={String(10+index*4)}><ResponsivePhoto src={image.src} alt={image.alt}/><span className="gallery-expand"><Expand size={20}/></span></button>)}</div>
+        <div className="gallery-grid" data-reveal-group data-stagger="105">{gallery.slice(0,3).map((image,index)=><button key={image.src} className={"gallery-tile gallery-tile-"+index} onClick={event=>openGallery(index,event.currentTarget)} aria-label={"Ampliar imagem "+(index+1)+": "+image.alt} data-reveal-item data-reveal={index===0?"left":index===2?"right":"up"} data-scroll-motion={String(10+index*4)}><ResponsivePhoto src={image.src} alt={image.alt}/><span className="gallery-expand shiny-action-icon"><Expand size={20}/></span></button>)}</div>
         <div className="gallery-footer"><p>Toque nas fotos para ampliar.</p><a href={business.instagram} {...external}>Ver promoções no Instagram <ArrowUpRight size={18}/></a></div>
       </div></section>
 
@@ -141,11 +141,11 @@ export default function BeStore() {
     </main>
 
     <FooterSection whatsappHref={generalWhatsApp} />
-    <WhatsAppLink href={generalWhatsApp} className="floating-contact" label="Fale com a Be Store pelo WhatsApp"><MessageCircle size={21}/><span>Fale com a Be Store</span></WhatsAppLink>
+    <ShinyButton asChild><WhatsAppLink href={generalWhatsApp} className="floating-contact" label="Fale com a Be Store pelo WhatsApp"><MessageCircle size={21}/><span>Fale com a Be Store</span></WhatsAppLink></ShinyButton>
 
     <Dialog open={selectedProduct!==null} onOpenChange={open=>{if(!open)setSelectedProduct(null);}}>
       <DialogContent className="product-dialog" showCloseButton={false} onCloseAutoFocus={restoreFocus}>
-        <DialogClose asChild><button className="icon-button close-button" aria-label="Fechar detalhes"><X/></button></DialogClose>
+        <DialogClose asChild><button className="icon-button close-button shiny-button" aria-label="Fechar detalhes"><X/></button></DialogClose>
         {selectedProduct && <><div className={`dialog-photo${selectedProduct.id==="iphone-18-pro-reference"?" dialog-photo-contain":""}`}><img src={siteAsset(selectedProduct.images[0].src)} alt={selectedProduct.images[0].alt} width={selectedProduct.id==="iphone-18-pro-reference"?1792:1200} height={selectedProduct.id==="iphone-18-pro-reference"?1024:1500}/></div><div className="dialog-copy"><span className="product-status">Consulte disponibilidade</span><DialogTitle className="dialog-title">{selectedProduct.name}</DialogTitle><DialogDescription className="dialog-description">{selectedProduct.description}</DialogDescription><p className="consult-text">Modelos, armazenamento, cores, condição e valores são confirmados pela equipe. As fotos não representam uma oferta ou confirmação de estoque.</p><ShinyButton asChild><WhatsAppLink href={productWhatsApp(selectedProduct)} className="button button-light">Consultar pelo WhatsApp <ArrowUpRight size={20}/></WhatsAppLink></ShinyButton></div></>}
       </DialogContent>
     </Dialog>
@@ -153,8 +153,8 @@ export default function BeStore() {
     <Dialog open={galleryIndex!==null} onOpenChange={open=>{if(!open)setGalleryIndex(null);}}>
       <DialogContent className="gallery-dialog" showCloseButton={false} onCloseAutoFocus={restoreFocus} onKeyDown={event=>{if(event.key==="ArrowRight"){event.preventDefault();moveGallery(1);}if(event.key==="ArrowLeft"){event.preventDefault();moveGallery(-1);}}}>
         <DialogTitle className="sr-only">Galeria Be Store</DialogTitle><DialogDescription className="sr-only">Use as setas para navegar pelas imagens e Escape para fechar.</DialogDescription>
-        <DialogClose asChild><button className="icon-button close-button" aria-label="Fechar galeria"><X/></button></DialogClose>
-        {currentImage && <><figure className="lightbox-figure"><img src={siteAsset(currentImage.src)} alt={currentImage.alt} width="1200" height="1500"/></figure><div className="gallery-controls"><button className="icon-button" onClick={()=>moveGallery(-1)} aria-label="Imagem anterior"><ArrowLeft/></button><span aria-live="polite">{(galleryIndex??0)+1} / {gallery.length}</span><button className="icon-button" onClick={()=>moveGallery(1)} aria-label="Próxima imagem"><ArrowRight/></button></div></>}
+        <DialogClose asChild><button className="icon-button close-button shiny-button" aria-label="Fechar galeria"><X/></button></DialogClose>
+        {currentImage && <><figure className="lightbox-figure"><img src={siteAsset(currentImage.src)} alt={currentImage.alt} width="1200" height="1500"/></figure><div className="gallery-controls"><button className="icon-button shiny-button" onClick={()=>moveGallery(-1)} aria-label="Imagem anterior"><ArrowLeft/></button><span aria-live="polite">{(galleryIndex??0)+1} / {gallery.length}</span><button className="icon-button shiny-button" onClick={()=>moveGallery(1)} aria-label="Próxima imagem"><ArrowRight/></button></div></>}
       </DialogContent>
     </Dialog>
   </>;

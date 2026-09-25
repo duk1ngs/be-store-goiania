@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { business } from "@/lib/business";
 import { siteAsset } from "@/lib/site-path";
+import { ShinyButton } from "@/components/ui/shiny-button";
 
 const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 
@@ -44,9 +45,11 @@ export function FooterSection({ whatsappHref }: { whatsappHref: string }) {
           <p className="eyebrow">Be Store Goiânia</p>
           <h2>Seu próximo upgrade<br />começa com uma conversa.</h2>
           <p>Atendimento direto para encontrar o aparelho que combina com a sua rotina.</p>
-          <a className="button button-light" href={whatsappHref} {...external}>
-            Falar no WhatsApp <MessageCircle size={19} />
-          </a>
+          <ShinyButton asChild>
+            <a className="button button-light" href={whatsappHref} {...external}>
+              Falar no WhatsApp <MessageCircle size={19} />
+            </a>
+          </ShinyButton>
         </div>
 
         <div className="site-footer-links">

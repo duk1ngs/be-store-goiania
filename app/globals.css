@@ -220,14 +220,20 @@ main:focus,main>section[tabindex="-1"]:focus{outline:none}
 
 /* Restrained monochrome highlights for the primary actions and featured surfaces. */
 .shiny-button{position:relative;isolation:isolate;overflow:hidden}
-.shiny-button::before{content:"";position:absolute;z-index:2;inset:-40% -75%;pointer-events:none;background:linear-gradient(110deg,transparent 38%,rgba(255,255,255,.08) 45%,rgba(255,255,255,.72) 50%,rgba(255,255,255,.08) 55%,transparent 62%);mix-blend-mode:soft-light;transform:translate3d(-34%,0,0);animation:shiny-button-pass 4.6s cubic-bezier(.22,.68,0,1) infinite}
-.shiny-button::after{content:"";position:absolute;z-index:2;inset:0;border:1px solid transparent;border-radius:inherit;pointer-events:none;background:linear-gradient(120deg,rgba(255,255,255,.55),rgba(255,255,255,.08) 42%,rgba(255,255,255,.3)) border-box;-webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.48}
+.shiny-button::before{content:"";position:absolute;z-index:2;inset:-40% -75%;pointer-events:none;background:linear-gradient(110deg,transparent 37%,rgba(255,255,255,.12) 44%,rgba(255,255,255,.9) 50%,rgba(255,255,255,.12) 56%,transparent 63%);mix-blend-mode:soft-light;transform:translate3d(-34%,0,0);animation:shiny-button-pass 4.6s cubic-bezier(.22,.68,0,1) infinite}
+.shiny-button::after{content:"";position:absolute;z-index:2;inset:0;border:1px solid transparent;border-radius:inherit;pointer-events:none;background:linear-gradient(120deg,rgba(255,255,255,.72),rgba(255,255,255,.1) 42%,rgba(255,255,255,.42)) border-box;-webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.62}
+.shiny-button.button-light{box-shadow:0 0 0 1px rgba(255,255,255,.14),0 12px 34px rgba(255,255,255,.1),0 18px 42px rgba(0,0,0,.24)}
+.text-button.shiny-button{width:fit-content;margin-top:4px;padding:13px 18px;border-radius:999px;background:#090909;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 12px 28px rgba(0,0,0,.28)}
+.shiny-button.icon-button{background:#111;color:#fff;border-color:#4d4d4d;box-shadow:0 0 24px rgba(255,255,255,.055)}
+.shiny-action-icon{isolation:isolate;overflow:hidden;box-shadow:0 0 22px rgba(255,255,255,.12),0 10px 30px rgba(0,0,0,.28)}
+.shiny-action-icon::before{content:"";position:absolute;z-index:2;inset:-55%;pointer-events:none;background:linear-gradient(110deg,transparent 39%,rgba(255,255,255,.92) 50%,transparent 61%);mix-blend-mode:soft-light;transform:translate3d(-42%,0,0);animation:shiny-button-pass 5.2s cubic-bezier(.22,.68,0,1) infinite}
+.shiny-action-icon svg{position:relative;z-index:3}
 @keyframes shiny-button-pass{0%,52%{transform:translate3d(-34%,0,0)}82%,100%{transform:translate3d(34%,0,0)}}
 .border-beam{position:absolute;z-index:4;inset:0;overflow:hidden;border-radius:inherit;padding:1px;pointer-events:none;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.78}
 .border-beam::before{content:"";position:absolute;inset:-75%;background:conic-gradient(from 0deg,transparent 0 calc(50% - var(--beam-size)/2),rgba(255,255,255,.08) 46%,rgba(255,255,255,.88) 50%,rgba(255,255,255,.08) 54%,transparent calc(50% + var(--beam-size)/2));animation:border-beam-spin var(--beam-duration) linear infinite;will-change:transform}
 @keyframes border-beam-spin{to{transform:rotate(1turn)}}
-@media(max-width:640px){.border-beam{opacity:.62}.shiny-button::after{opacity:.4}}
-@media(prefers-reduced-motion:reduce){.border-beam::before,.shiny-button::before{animation:none!important}.border-beam::before{transform:rotate(35deg)}.shiny-button::before{opacity:0}}
+@media(max-width:640px){.border-beam{opacity:.62}.shiny-button::after{opacity:.5}}
+@media(prefers-reduced-motion:reduce){.border-beam::before,.shiny-button::before,.shiny-action-icon::before{animation:none!important}.border-beam::before{transform:rotate(35deg)}.shiny-button::before,.shiny-action-icon::before{opacity:0}}
 @media(max-width:700px){.benefit-grid>div,.benefit-grid>div:first-child,.benefit-grid>div:last-child{border-bottom:0}.benefit-grid>div:not(:last-child)::after{top:auto;bottom:0;left:0;right:0;width:auto;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2) 18%,rgba(255,255,255,.2) 82%,transparent)}}
 
 /* Editorial title details inspired by the supplied reference, kept in the Be Store system. */
