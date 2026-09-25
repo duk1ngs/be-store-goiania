@@ -30,7 +30,7 @@ const columns = [
   },
 ] as const;
 
-export function FooterSection() {
+export function FooterSection({ whatsappHref }: { whatsappHref: string }) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -44,7 +44,7 @@ export function FooterSection() {
           <p className="eyebrow">Be Store Goiânia</p>
           <h2>Seu próximo upgrade<br />começa com uma conversa.</h2>
           <p>Atendimento direto para encontrar o aparelho que combina com a sua rotina.</p>
-          <a className="button button-light" href={business.whatsapp} {...external}>
+          <a className="button button-light" href={whatsappHref} {...external}>
             Falar no WhatsApp <MessageCircle size={19} />
           </a>
         </div>
@@ -59,7 +59,7 @@ export function FooterSection() {
 
           <nav aria-label="Atendimento" data-reveal-item data-reveal="up">
             <h3>Atendimento</h3>
-            <a href={business.whatsapp} {...external}><MessageCircle size={16} /> WhatsApp</a>
+            <a href={whatsappHref} {...external}><MessageCircle size={16} /> WhatsApp</a>
             <a href={business.phoneHref}><Phone size={16} /> {business.phone}</a>
             <a href={business.maps} {...external}><MapPin size={16} /> Como chegar</a>
           </nav>

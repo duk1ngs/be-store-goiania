@@ -165,12 +165,13 @@ export default function FluidFieldBackground({
 
     const syncMotion = () => {
       cancelAnimationFrame(animationFrame);
-      running = !reducedMotion.matches;
+      running = !reducedMotion.matches && !document.hidden;
       render(performance.now());
     };
 
     reducedMotion.addEventListener("change", syncMotion);
     window.addEventListener("resize", resize, { passive: true });
+    document.addEventListener("visibilitychange", syncMotion);
     syncMotion();
 
     return () => {
@@ -178,6 +179,7 @@ export default function FluidFieldBackground({
       cancelAnimationFrame(animationFrame);
       reducedMotion.removeEventListener("change", syncMotion);
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", syncMotion);
       if (buffer) gl.deleteBuffer(buffer);
       gl.deleteProgram(program);
       gl.deleteShader(vertexShader);

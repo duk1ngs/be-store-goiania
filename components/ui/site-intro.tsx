@@ -1,16 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { ArrowRight } from "lucide-react";
+import FluidFieldBackground from "@/components/ui/fluid-field";
 import { siteAsset } from "@/lib/site-path";
+import { isValidVisitorName, normalizeVisitorName, VISITOR_NAME_KEY } from "@/lib/whatsapp";
 
-const INTRO_KEY = "be-store-intro-seen-v2";
 export const INTRO_COMPLETE_EVENT = "be-store:intro-complete";
 
 type IntroPhase = "hidden" | "visible" | "leaving";
 
-export function SiteIntro() {
+export function SiteIntro({ onComplete }: { onComplete: (name: string) => void }) {
   const [phase, setPhase] = useState<IntroPhase>("hidden");
-  const skipRef = useRef<() => void>(() => undefined);
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const finishRef = useRef<(name: string) => void>(() => undefined);
 
   useEffect(() => {
     const timers: number[] = [];
@@ -26,27 +30,31 @@ export function SiteIntro() {
       document.documentElement.style.overflow = previousHtmlOverflow;
       delete document.documentElement.dataset.introActive;
     };
-    const finish = () => {
+    const finish = (visitorName: string) => {
       if (!mounted) return;
-      try {
-        sessionStorage.setItem(INTRO_KEY, "true");
-      } catch {
-        // Storage can be unavailable in privacy modes; the intro still completes.
-      }
       unlockPage();
       setPhase("hidden");
+      onComplete(visitorName);
       requestAnimationFrame(announceComplete);
     };
-    const beginExit = () => {
+    const beginExit = (visitorName: string) => {
       if (finishing) return;
       finishing = true;
+      try {
+        sessionStorage.setItem(VISITOR_NAME_KEY, visitorName);
+      } catch {
+        // The current visit still continues when storage is unavailable.
+      }
+      onComplete(visitorName);
       setPhase("leaving");
-      timers.push(window.setTimeout(finish, reducedMotion.matches ? 160 : 820));
+      timers.push(window.setTimeout(() => finish(visitorName), reducedMotion.matches ? 160 : 880));
     };
-    skipRef.current = beginExit;
+    finishRef.current = beginExit;
 
     try {
-      if (sessionStorage.getItem(INTRO_KEY)) {
+      const storedName = normalizeVisitorName(sessionStorage.getItem(VISITOR_NAME_KEY) || "");
+      if (isValidVisitorName(storedName)) {
+        onComplete(storedName);
         requestAnimationFrame(announceComplete);
         return;
       }
@@ -58,15 +66,25 @@ export function SiteIntro() {
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
     setPhase("visible");
-    timers.push(window.setTimeout(beginExit, reducedMotion.matches ? 680 : 2300));
 
     return () => {
       mounted = false;
       timers.forEach(window.clearTimeout);
-      skipRef.current = () => undefined;
+      finishRef.current = () => undefined;
       unlockPage();
     };
-  }, []);
+  }, [onComplete]);
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const visitorName = normalizeVisitorName(name);
+    if (!isValidVisitorName(visitorName)) {
+      setError("Digite seu nome para continuar.");
+      return;
+    }
+    setError("");
+    finishRef.current(visitorName);
+  };
 
   if (phase === "hidden") return null;
 
@@ -77,18 +95,43 @@ export function SiteIntro() {
       aria-modal="true"
       aria-label="Introdução da Be Store Goiânia"
     >
+      <FluidFieldBackground className="intro-fluid-field" mode="dark" brightness={0.82} />
       <div className="site-intro-panel site-intro-panel-left" aria-hidden="true" />
       <div className="site-intro-panel site-intro-panel-right" aria-hidden="true" />
       <div className="site-intro-content">
         <div className="site-intro-logo" aria-hidden="true">
           <img src={siteAsset("/images/be-store-logo.svg")} alt="" width="150" height="150" />
         </div>
-        <p>Tecnologia para o que vem a seguir.</p>
+        <p className="site-intro-kicker">Tecnologia para o que vem a seguir.</p>
         <span className="site-intro-line" aria-hidden="true" />
+        <form className="site-intro-form" onSubmit={submit} noValidate>
+          <label htmlFor="visitor-name">Como podemos chamar você?</label>
+          <div className="site-intro-field">
+            <input
+              id="visitor-name"
+              name="visitor-name"
+              value={name}
+              onChange={(event) => {
+                setName(event.target.value);
+                if (error) setError("");
+              }}
+              autoComplete="given-name"
+              inputMode="text"
+              maxLength={40}
+              placeholder="Seu nome"
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? "visitor-name-error" : undefined}
+            />
+            <button type="submit" aria-label="Entrar no site">
+              Entrar <ArrowRight size={18} />
+            </button>
+          </div>
+          <p className="site-intro-greeting" aria-live="polite">
+            {normalizeVisitorName(name) ? `Olá, ${normalizeVisitorName(name)}.` : "Uma experiência preparada para você."}
+          </p>
+          {error && <p className="site-intro-error" id="visitor-name-error" role="alert">{error}</p>}
+        </form>
       </div>
-      <button className="site-intro-skip" type="button" onClick={() => skipRef.current()}>
-        Pular introdução
-      </button>
     </div>
   );
 }

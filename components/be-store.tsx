@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowUpRight, ArrowDown, ArrowRight, ArrowLeft, Menu, X, Plus, Camera as Instagram, MessageCircle, MapPin, Phone, Star, Truck, CreditCard, Expand } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { Sheet, SheetTrigger, SheetContent, SheetTitle, SheetDescription, SheetClose } from "@/components/ui/sheet";
@@ -11,6 +11,7 @@ import { useScrollMotion } from "@/hooks/use-scroll-motion";
 import { business } from "@/lib/business";
 import { catalog, gallery, type Product } from "@/lib/catalog";
 import { siteAsset } from "@/lib/site-path";
+import { buildWhatsAppHref } from "@/lib/whatsapp";
 
 const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 const navigation = [{href:"#selecao",label:"A seleção"},{href:"#sobre",label:"A Be Store"},{href:"#instagram",label:"Instagram"},{href:"#contato",label:"Visite a loja"}];
@@ -18,13 +19,13 @@ const navigation = [{href:"#selecao",label:"A seleção"},{href:"#sobre",label:"
 function Logo() {
   return <a className="logo-window" href="#inicio" aria-label="Be Store Goiânia, início"><img src={siteAsset("/images/be-store-logo.svg")} alt="Be Store" width="150" height="150"/></a>;
 }
-function WhatsAppLink({children,className="",label}:{children:React.ReactNode;className?:string;label?:string}) {
-  return <a className={className} href={business.whatsapp} aria-label={label} {...external}>{children}</a>;
+function WhatsAppLink({children,href,className="",label}:{children:React.ReactNode;href:string;className?:string;label?:string}) {
+  return <a className={className} href={href} aria-label={label} {...external}>{children}</a>;
 }
 function ResponsivePhoto({src,alt,className="",priority=false}:{src:string;alt:string;className?:string;priority?:boolean}) {
   const resolved=siteAsset(src);
-  const base=siteAsset(src.replace(".webp",""));
-  return <img className={className} src={resolved} srcSet={base+"-640.webp 640w, "+resolved+" 1200w"} sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 600px" alt={alt} width="1200" height="1500" loading={priority?"eager":"lazy"} fetchPriority={priority?"high":"auto"}/>;
+  const sourceSet=src.endsWith(".webp")?siteAsset(src.replace(".webp","-640.webp"))+" 640w, "+resolved+" 1200w":undefined;
+  return <img className={className} src={resolved} srcSet={sourceSet} sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 600px" alt={alt} width="1200" height="1500" loading={priority?"eager":"lazy"} fetchPriority={priority?"high":"auto"}/>;
 }
 
 export default function BeStore() {
@@ -34,6 +35,7 @@ export default function BeStore() {
   const [galleryIndex,setGalleryIndex]=useState<number|null>(null);
   const [showOriginal,setShowOriginal]=useState(false);
   const [activeSection,setActiveSection]=useState("inicio");
+  const [visitorName,setVisitorName]=useState("");
   const lastTrigger=useRef<HTMLButtonElement|null>(null);
   const navigationTarget=useRef<string|null>(null);
   const finishMenuNavigation=(event:Event)=>{
@@ -50,6 +52,10 @@ export default function BeStore() {
   };
 
   useScrollMotion();
+
+  const handleIntroComplete=useCallback((name:string)=>setVisitorName(name),[]);
+  const generalWhatsApp=buildWhatsAppHref(visitorName);
+  const productWhatsApp=(product:Product)=>buildWhatsAppHref(visitorName,product);
 
   useEffect(()=>{
     if(!("IntersectionObserver" in window))return;
@@ -71,26 +77,26 @@ export default function BeStore() {
 
   return <>
     <TopoField className="global-fluid-field" mode="dark" speed={0.58} length={1.08} density={1.15} opacity={0.9} saturation={0} brightness={0.92} />
-    <SiteIntro />
+    <SiteIntro onComplete={handleIntroComplete} />
     <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
     <div className="announcement"><span>De Goiânia para todo o Brasil</span><span>Em até 18x no cartão*</span></div>
     <header className="site-header">
       <div className="site-header-inner wrap">
       <Logo/>
       <nav aria-label="Navegação principal">{navigation.map(item=><a key={item.href} href={item.href} aria-current={activeSection===item.href.slice(1)?"location":undefined}>{item.label}</a>)}</nav>
-      <WhatsAppLink className="header-contact">Vamos conversar <ArrowUpRight size={18}/></WhatsAppLink>
+      <WhatsAppLink href={generalWhatsApp} className="header-contact">Vamos conversar <ArrowUpRight size={18}/></WhatsAppLink>
       <Sheet open={menuOpen} onOpenChange={setMenuOpen}><SheetTrigger asChild><button className="icon-button mobile-menu" aria-label="Abrir menu"><Menu size={24}/></button></SheetTrigger><SheetContent className="mobile-sheet" showCloseButton={false} onCloseAutoFocus={finishMenuNavigation}>
         <SheetTitle>Be Store Goiânia</SheetTitle><SheetDescription>Explore e fale com a gente.</SheetDescription>
         <SheetClose asChild><button className="icon-button close-button" aria-label="Fechar menu"><X/></button></SheetClose>
         <nav aria-label="Navegação móvel">{navigation.map(item=><a key={item.href} href={item.href} aria-current={activeSection===item.href.slice(1)?"location":undefined} onClick={event=>{event.preventDefault();navigationTarget.current=item.href;setMenuOpen(false);}}>{item.label}</a>)}</nav>
-        <WhatsAppLink className="button button-light">Conversar no WhatsApp <MessageCircle size={19}/></WhatsAppLink>
+        <WhatsAppLink href={generalWhatsApp} className="button button-light">Conversar no WhatsApp <MessageCircle size={19}/></WhatsAppLink>
       </SheetContent></Sheet>
       </div>
     </header>
 
     <main id="conteudo" tabIndex={-1}>
       <section className="hero wrap" id="inicio" aria-labelledby="hero-title">
-        <div className="hero-copy" data-hero-group><p className="eyebrow" data-motion-item data-reveal="fade">Be Store Goiânia</p><h1 id="hero-title" aria-label="Seu próximo upgrade."><span className="title-mask"><span data-motion-item data-reveal="up">Seu próximo</span></span><span className="title-mask"><em data-motion-item data-reveal="up">upgrade.</em></span></h1><p className="hero-description" data-motion-item data-reveal="up">Novas possibilidades começam com a escolha certa. Encontre o iPhone que combina com você.</p><div data-motion-item data-reveal="up"><WhatsAppLink className="button button-light">Encontre seu iPhone <ArrowUpRight size={20}/></WhatsAppLink><a className="explore-link" href="#selecao">Explore a seleção <ArrowDown size={16}/></a></div></div>
+        <div className="hero-copy" data-hero-group><p className="eyebrow" data-motion-item data-reveal="fade">{visitorName?`Bem-vindo, ${visitorName}.`:"Be Store Goiânia"}</p><h1 id="hero-title" aria-label="Seu próximo upgrade."><span className="title-mask"><span data-motion-item data-reveal="up">Seu próximo</span></span><span className="title-mask"><em data-motion-item data-reveal="up">upgrade.</em></span></h1><p className="hero-description" data-motion-item data-reveal="up">Novas possibilidades começam com a escolha certa. Encontre o iPhone que combina com você.</p><div data-motion-item data-reveal="up"><WhatsAppLink href={generalWhatsApp} className="button button-light">Encontre seu iPhone <ArrowUpRight size={20}/></WhatsAppLink><a className="explore-link" href="#selecao">Explore a seleção <ArrowDown size={16}/></a></div></div>
         <figure className="hero-visual" data-hero-visual data-scroll-motion="28">
           <picture>
             <source media="(max-width: 640px)" srcSet={`${siteAsset("/images/iphones-studio-mobile-640.webp")} 640w, ${siteAsset("/images/iphones-studio-mobile.webp")} 1122w`} sizes="100vw" />
@@ -110,11 +116,11 @@ export default function BeStore() {
       <section className="selection light-section" id="selecao" tabIndex={-1}>
         <div className="wrap">
           <div className="section-heading heading-split" data-reveal-group><div data-reveal-item data-reveal="left"><p className="eyebrow">A seleção Be Store</p><h2>O que move<br/>o seu dia?</h2></div><p data-reveal-item data-reveal="right">Para se conectar, criar ou ir mais longe.<br/>A gente ajuda você a escolher.</p></div>
-          <div className="product-grid" data-reveal-group data-stagger="110">{catalog.map((product,index)=><article className={"product-card product-"+index} key={product.id} data-reveal-item data-reveal={index===0?"left":"right"}>
-            <button className="product-photo" onClick={event=>openProduct(product,event.currentTarget)} aria-label={"Ver detalhes: "+(index===0?"iPhones":"iPads e acessórios")}><ResponsivePhoto src={product.images[0].src} alt={product.images[0].alt}/><span className="photo-label">{index===0?"iPhones":"iPads & acessórios"}</span><span className="photo-expand"><Plus size={24}/></span></button>
-            <div className="product-info"><div><p className="product-status">{product.illustrative?"Seleção ilustrativa":product.availability==="disponivel"?"Disponível para consulta":"Consulte disponibilidade"}</p><h3>{product.name}</h3><p>{product.description}</p></div><button className="text-button" onClick={event=>openProduct(product,event.currentTarget)}>Conhecer possibilidades <ArrowUpRight size={19}/></button></div>
+          <div className="product-grid" data-reveal-group data-stagger="130">{catalog.map((product,index)=><article className={`product-card product-${index}${index===0?" product-card-featured":""}`} key={product.id} data-reveal-item data-reveal={index===0?"up":index%2?"left":"right"}>
+            <button className="product-photo" onClick={event=>openProduct(product,event.currentTarget)} aria-label={"Ver detalhes: "+product.label}><ResponsivePhoto src={product.images[0].src} alt={product.images[0].alt}/><span className="photo-label">{index===0?"Referência visual · consulte a equipe":product.label}</span><span className="photo-expand"><Plus size={24}/></span></button>
+            <div className="product-info"><div><p className="product-status">{index===0?"Novo conceito na seleção":product.illustrative?"Seleção ilustrativa":product.availability==="disponivel"?"Disponível para consulta":"Consulte disponibilidade"}</p><h3>{product.name}</h3><p>{product.description}</p></div><a className="text-button" href={productWhatsApp(product)} {...external}>Conhecer possibilidades <ArrowUpRight size={19}/></a></div>
           </article>)}</div>
-          <div className="catalog-note"><span>Modelos, cores, valores e disponibilidade são confirmados no atendimento.</span><WhatsAppLink>Consultar a equipe <ArrowUpRight size={17}/></WhatsAppLink></div>
+          <div className="catalog-note"><span>Modelos, cores, valores e disponibilidade são confirmados no atendimento.</span><WhatsAppLink href={generalWhatsApp}>Consultar a equipe <ArrowUpRight size={17}/></WhatsAppLink></div>
         </div>
       </section>
 
@@ -131,16 +137,16 @@ export default function BeStore() {
         <div className="gallery-footer"><p>Toque nas fotos para ampliar e ver os originais disponíveis.</p><a href={business.instagram} {...external}>Ver promoções no Instagram <ArrowUpRight size={18}/></a></div>
       </div></section>
 
-      <section className="contact" id="contato" tabIndex={-1}><div className="wrap contact-grid" data-reveal-group><div className="contact-copy" data-reveal-item data-reveal="left"><p className="eyebrow">Perto de você</p><h2>A gente se encontra<br/>no Bueno.</h2><p>Prefere ver de perto ou conversar primeiro?<br/>Escolha como quer falar com a gente.</p><WhatsAppLink className="button button-light">Converse no WhatsApp <MessageCircle size={20}/></WhatsAppLink><span className="contact-subline">Combine sua visita com a nossa equipe.</span></div><div className="contact-details" data-reveal-item data-reveal="right" data-scroll-motion="16"><div className="location-heading"><MapPin size={27} strokeWidth={1.3}/><span>Be Store Goiânia</span></div><address>{business.address}<br/>{business.city}<br/><span>CEP {business.postalCode}</span></address><a className="text-link" href={business.maps} {...external}>Abrir no Google Maps <ArrowUpRight size={20}/></a><div className="contact-bottom"><a href={business.phoneHref}><Phone size={17}/>{business.phone}</a><a href={business.instagram} {...external}><Instagram size={18}/>{business.instagramHandle}</a></div></div></div></section>
+      <section className="contact" id="contato" tabIndex={-1}><div className="wrap contact-grid" data-reveal-group><div className="contact-copy" data-reveal-item data-reveal="left"><p className="eyebrow">Perto de você</p><h2>A gente se encontra<br/>no Bueno.</h2><p>Prefere ver de perto ou conversar primeiro?<br/>Escolha como quer falar com a gente.</p><WhatsAppLink href={generalWhatsApp} className="button button-light">Converse no WhatsApp <MessageCircle size={20}/></WhatsAppLink><span className="contact-subline">Combine sua visita com a nossa equipe.</span></div><div className="contact-details" data-reveal-item data-reveal="right" data-scroll-motion="16"><div className="location-heading"><MapPin size={27} strokeWidth={1.3}/><span>Be Store Goiânia</span></div><address>{business.address}<br/>{business.city}<br/><span>CEP {business.postalCode}</span></address><a className="text-link" href={business.maps} {...external}>Abrir no Google Maps <ArrowUpRight size={20}/></a><div className="contact-bottom"><a href={business.phoneHref}><Phone size={17}/>{business.phone}</a><a href={business.instagram} {...external}><Instagram size={18}/>{business.instagramHandle}</a></div></div></div></section>
     </main>
 
-    <FooterSection />
-    <WhatsAppLink className="floating-contact" label="Fale com a Be Store pelo WhatsApp"><MessageCircle size={21}/><span>Fale com a Be Store</span></WhatsAppLink>
+    <FooterSection whatsappHref={generalWhatsApp} />
+    <WhatsAppLink href={generalWhatsApp} className="floating-contact" label="Fale com a Be Store pelo WhatsApp"><MessageCircle size={21}/><span>Fale com a Be Store</span></WhatsAppLink>
 
     <Dialog open={selectedProduct!==null} onOpenChange={open=>{if(!open)setSelectedProduct(null);}}>
       <DialogContent className="product-dialog" showCloseButton={false} onCloseAutoFocus={restoreFocus}>
         <DialogClose asChild><button className="icon-button close-button" aria-label="Fechar detalhes"><X/></button></DialogClose>
-        {selectedProduct && <><div className="dialog-photo"><img src={siteAsset(selectedProduct.images[productPhoto].src)} alt={selectedProduct.images[productPhoto].alt} width="1200" height="1500"/><div className="photo-switch">{selectedProduct.images.map((image,index)=><button key={image.src} aria-pressed={productPhoto===index} onClick={()=>setProductPhoto(index)}>{index===0?"Tratamento criativo":"Foto original"}</button>)}</div></div><div className="dialog-copy"><span className="product-status">Referência visual</span><DialogTitle className="dialog-title">{selectedProduct.name}</DialogTitle><DialogDescription className="dialog-description">{selectedProduct.description}</DialogDescription><p className="consult-text">Modelos, armazenamento, cores, condição e valores são confirmados pela equipe. As fotos não representam uma oferta ou confirmação de estoque.</p><WhatsAppLink className="button button-light">Consultar pelo WhatsApp <ArrowUpRight size={20}/></WhatsAppLink><p className="image-caption">{selectedProduct.images[productPhoto].caption}</p></div></>}
+        {selectedProduct && <><div className={`dialog-photo${selectedProduct.id==="iphone-18-pro-reference"?" dialog-photo-contain":""}`}><img src={siteAsset(selectedProduct.images[productPhoto].src)} alt={selectedProduct.images[productPhoto].alt} width="1200" height="1500"/>{selectedProduct.images.length>1&&<div className="photo-switch">{selectedProduct.images.map((image,index)=><button key={image.src} aria-pressed={productPhoto===index} onClick={()=>setProductPhoto(index)}>{index===0?"Versão editorial":"Foto original"}</button>)}</div>}</div><div className="dialog-copy"><span className="product-status">Referência visual</span><DialogTitle className="dialog-title">{selectedProduct.name}</DialogTitle><DialogDescription className="dialog-description">{selectedProduct.description}</DialogDescription><p className="consult-text">Modelos, armazenamento, cores, condição e valores são confirmados pela equipe. As fotos não representam uma oferta ou confirmação de estoque.</p><WhatsAppLink href={productWhatsApp(selectedProduct)} className="button button-light">Consultar pelo WhatsApp <ArrowUpRight size={20}/></WhatsAppLink><p className="image-caption">{selectedProduct.images[productPhoto].caption}</p></div></>}
       </DialogContent>
     </Dialog>
 
