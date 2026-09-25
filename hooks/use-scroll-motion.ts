@@ -160,7 +160,29 @@ export function useScrollMotion() {
 
     const startForPreference = () => reducedMotion.matches ? startReducedMotion() : startMotion();
 
+    const handleMotionPreferenceChange = () => {
+      if (reducedMotion.matches) {
+        runningAnimations.splice(0).forEach((animation) => animation.cancel());
+        revealObserver?.disconnect();
+        revealObserver = null;
+        window.removeEventListener("scroll", requestUpdate);
+        window.removeEventListener("resize", requestUpdate);
+        scrollElements.forEach((element) => element.style.setProperty("--scroll-shift", "0px"));
+        showEverything();
+        return;
+      }
+
+      if (!started) {
+        startMotion();
+        return;
+      }
+      window.addEventListener("scroll", requestUpdate, { passive: true });
+      window.addEventListener("resize", requestUpdate, { passive: true });
+      requestUpdate();
+    };
+
     window.addEventListener("be-store:intro-complete", startForPreference, { once: true });
+    reducedMotion.addEventListener("change", handleMotionPreferenceChange);
     introCheckFrame = requestAnimationFrame(() => {
       if (document.documentElement.dataset.introActive !== "true") startForPreference();
     });
@@ -168,6 +190,7 @@ export function useScrollMotion() {
     return () => {
       revealObserver?.disconnect();
       window.removeEventListener("be-store:intro-complete", startForPreference);
+      reducedMotion.removeEventListener("change", handleMotionPreferenceChange);
       window.removeEventListener("scroll", requestUpdate);
       window.removeEventListener("resize", requestUpdate);
       cancelAnimationFrame(frame);

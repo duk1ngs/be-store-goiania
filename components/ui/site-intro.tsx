@@ -15,6 +15,7 @@ export function SiteIntro({ onComplete }: { onComplete: (name: string) => void }
   const [phase, setPhase] = useState<IntroPhase>("hidden");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
   const finishRef = useRef<(name: string) => void>(() => undefined);
 
   useEffect(() => {
@@ -81,6 +82,7 @@ export function SiteIntro({ onComplete }: { onComplete: (name: string) => void }
     const visitorName = normalizeVisitorName(name);
     if (!isValidVisitorName(visitorName)) {
       setError("Digite seu nome para continuar.");
+      inputRef.current?.focus();
       return;
     }
     setError("");
@@ -109,6 +111,7 @@ export function SiteIntro({ onComplete }: { onComplete: (name: string) => void }
           <label htmlFor="visitor-name">Como podemos chamar você?</label>
           <div className="site-intro-field">
             <input
+              ref={inputRef}
               id="visitor-name"
               name="visitor-name"
               value={name}

@@ -180,7 +180,6 @@ button{cursor:pointer}
 .mobile-sheet{max-height:100dvh;overflow-y:auto}
 .gallery-dialog{overflow-y:auto}
 .lightbox-figure img{max-height:calc(95dvh - 170px)}
-main>section[id]{scroll-margin-top:112px}
 main:focus,main>section[tabindex="-1"]:focus{outline:none}
 .section-heading h2,.about-copy h2,.contact-copy h2,.reputation h2{text-wrap:balance}
 .button:active,.floating-contact:active{transform:translateY(0) scale(.985)}
@@ -191,6 +190,7 @@ main:focus,main>section[tabindex="-1"]:focus{outline:none}
 .button svg,.text-link svg,.text-button svg,.back-top svg,.site-footer a svg{transition:transform var(--duration-fast) var(--ease-premium)}
 .button:hover svg,.text-link:hover svg,.text-button:hover svg,.back-top:hover svg,.site-footer a:hover svg{transform:translate3d(3px,-1px,0)}
 @media(hover:hover){.product-card:hover{transform:translateY(-6px);border-color:#ffffff26}.gallery-tile:hover{box-shadow:0 24px 70px #0008}}
+@media(hover:none){.hero-visual:hover img,.product-photo:hover img,.gallery-tile:hover img{transform:none}.product-photo:hover .photo-expand{transform:none}}
 .mobile-sheet nav a[aria-current=location]{color:#fff}.mobile-sheet nav a[aria-current=location]::after{content:"";display:inline-block;width:26px;height:1px;margin-left:12px;vertical-align:middle;background:#fff}
 @media(max-width:640px){.site-header{top:0}.floating-contact{bottom:max(16px,env(safe-area-inset-bottom));right:max(16px,env(safe-area-inset-right))}}
 @media(max-width:1050px){.site-footer-inner{grid-template-columns:minmax(260px,.75fr) minmax(0,1.25fr);gap:64px 7vw}.site-footer-links{grid-template-columns:repeat(2,minmax(0,1fr));padding-top:86px}.site-footer-bottom{grid-template-columns:auto 1fr}.site-footer-bottom a{grid-column:2;justify-self:end}}

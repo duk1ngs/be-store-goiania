@@ -48,7 +48,7 @@ export default function BeStore() {
       const section=document.querySelector<HTMLElement>(target);
       history.pushState(null,"",target);
       section?.focus({preventScroll:true});
-      if(section) window.scrollTo({top:window.scrollY+section.getBoundingClientRect().top-24,behavior:"instant"});
+      section?.scrollIntoView({block:"start",behavior:"instant"});
     });
   };
 
@@ -77,7 +77,7 @@ export default function BeStore() {
   const currentImage=galleryIndex===null?null:gallery[galleryIndex];
 
   return <>
-    <TopoField className="global-fluid-field" mode="dark" speed={0.76} length={1.08} density={1.15} opacity={0.9} saturation={0} brightness={0.92} />
+    {visitorName && <TopoField className="global-fluid-field" mode="dark" speed={0.76} length={1.08} density={1.15} opacity={0.9} saturation={0} brightness={0.92} />}
     <SiteIntro onComplete={handleIntroComplete} />
     <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
     <div className="announcement"><span>De Goiânia para todo o Brasil</span><span>Em até 18x no cartão*</span></div>

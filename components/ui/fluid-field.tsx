@@ -157,7 +157,6 @@ export default function FluidFieldBackground({
     };
 
     const render = (now: number) => {
-      resize();
       gl.uniform1f(time, reducedMotion.matches ? 0 : (now - startedAt) / 1000);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       if (running) animationFrame = requestAnimationFrame(render);
@@ -170,15 +169,19 @@ export default function FluidFieldBackground({
     };
 
     reducedMotion.addEventListener("change", syncMotion);
-    window.addEventListener("resize", resize, { passive: true });
+    const resizeObserver = "ResizeObserver" in window ? new ResizeObserver(resize) : null;
+    resizeObserver?.observe(canvas);
+    if (!resizeObserver) window.addEventListener("resize", resize, { passive: true });
     document.addEventListener("visibilitychange", syncMotion);
+    resize();
     syncMotion();
 
     return () => {
       running = false;
       cancelAnimationFrame(animationFrame);
       reducedMotion.removeEventListener("change", syncMotion);
-      window.removeEventListener("resize", resize);
+      resizeObserver?.disconnect();
+      if (!resizeObserver) window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", syncMotion);
       if (buffer) gl.deleteBuffer(buffer);
       gl.deleteProgram(program);
