@@ -13,8 +13,7 @@ body{position:relative;isolation:isolate}
 .global-fluid-field{position:fixed;inset:0;z-index:0;width:100vw;height:100dvh;overflow:hidden;opacity:.9}
 .global-fluid-field canvas{display:block;width:100%;height:100%}
 .announcement,main,.site-footer{position:relative;z-index:1}
-@media(min-width:901px){.global-fluid-field{display:none}body::before{content:"";position:fixed;z-index:0;inset:-18%;pointer-events:none;background:radial-gradient(ellipse 42% 34% at 22% 22%,rgba(255,255,255,.045),transparent 72%),radial-gradient(ellipse 38% 30% at 78% 68%,rgba(255,255,255,.03),transparent 74%);filter:blur(34px);animation:desktop-ambient-drift 18s ease-in-out infinite alternate;will-change:transform,opacity}}
-@keyframes desktop-ambient-drift{from{transform:translate3d(-1.5%,-1%,0) scale(1);opacity:.72}to{transform:translate3d(1.5%,1%,0) scale(1.06);opacity:1}}
+@media(min-width:901px){.global-fluid-field{opacity:.78}}
 .light-section{background:rgba(0,0,0,.76);color:#f5f5f7;backdrop-filter:blur(3px)}
 button{cursor:pointer}
 .skip-link{position:fixed;left:20px;top:-70px;padding:14px 24px;background:#fff;color:#111;z-index:1000}
@@ -222,6 +221,8 @@ main:focus,main>section[tabindex="-1"]:focus{outline:none}
 
 /* Restrained monochrome highlights for the primary actions and featured surfaces. */
 .shiny-button{position:relative;isolation:isolate;overflow:hidden}
+.floating-contact.shiny-button{position:fixed;width:auto}
+@media(max-width:640px){.floating-contact .shiny-button-content{display:inline-flex}}
 .shiny-button::before{content:"";position:absolute;z-index:0;inset:-40% -75%;pointer-events:none;background:linear-gradient(110deg,transparent 39%,rgba(255,255,255,.08) 45%,rgba(255,255,255,.68) 50%,rgba(255,255,255,.08) 55%,transparent 61%);mix-blend-mode:soft-light;transform:translate3d(-42%,0,0);animation:shiny-button-pass 5.2s cubic-bezier(.22,.68,0,1) infinite}
 .shiny-button::after{content:"";position:absolute;z-index:1;inset:0;border-radius:inherit;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2),inset 0 1px 12px rgba(255,255,255,.045);opacity:.72}
 .shiny-button svg{position:relative;z-index:2}

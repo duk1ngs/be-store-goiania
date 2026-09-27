@@ -68,7 +68,8 @@ const FRAGMENT_SHADER = `
     float gridSize = 58.0 * u_dpr;
     vec2 gridCell = fract(pixel / gridSize);
     float thickness = 1.0 / gridSize;
-    float grid = clamp(step(1.0 - thickness, gridCell.x) + step(1.0 - thickness, gridCell.y), 0.0, 1.0) * 0.045;
+    float gridVisibility = 1.0 - step(900.5, u_resolution.x / u_dpr);
+    float grid = clamp(step(1.0 - thickness, gridCell.x) + step(1.0 - thickness, gridCell.y), 0.0, 1.0) * 0.045 * gridVisibility;
 
     vec2 drift = vec2(
       sin(st.y * 3.4 + u_time * 0.15),
