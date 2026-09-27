@@ -9,6 +9,7 @@ import { SiteIntro } from "@/components/ui/site-intro";
 import TopoField from "@/components/ui/topo-field";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { ShinyButton } from "@/components/ui/shiny-button";
+import { ProductShowcase } from "@/components/ui/product-showcase";
 import { useScrollMotion } from "@/hooks/use-scroll-motion";
 import { business } from "@/lib/business";
 import { catalog, gallery, type Product } from "@/lib/catalog";
@@ -116,7 +117,7 @@ export default function BeStore() {
         <div className="wrap">
           <div className="section-heading heading-split" data-reveal-group><div data-reveal-item data-reveal="left"><p className="eyebrow">A seleção Be Store</p><h2>O que move<br/>o seu dia?</h2></div><p data-reveal-item data-reveal="right">Para se conectar, criar ou ir mais longe.<br/>A gente ajuda você a escolher.</p></div>
           <div className="product-grid" data-reveal-group data-stagger="130">{catalog.map((product,index)=><article className={`product-card product-${index}${index===0?" product-card-featured":""}`} key={product.id} data-reveal-item data-reveal={index===0?"up":index%2?"left":"right"}>
-            <button className="product-photo" onClick={event=>openProduct(product,event.currentTarget)} aria-label={"Ver detalhes: "+product.label}><ResponsivePhoto src={product.images[0].src} alt={product.images[0].alt}/><span className="photo-expand shiny-action-icon"><Plus size={24}/></span></button>
+            <button className="product-photo" onClick={event=>openProduct(product,event.currentTarget)} aria-label={"Ver detalhes: "+product.label}>{index===0?<ProductShowcase/>:<ResponsivePhoto src={product.images[0].src} alt={product.images[0].alt}/>}<span className="photo-expand shiny-action-icon"><Plus size={24}/></span></button>
             <div className="product-info"><div><p className="product-status">{index===0?"Destaque da seleção":product.availability==="disponivel"?"Disponível para consulta":"Consulte disponibilidade"}</p><h3>{product.name}</h3><p>{product.description}</p></div><ShinyButton asChild><a className="text-button" href={productWhatsApp(product)} {...external}>Conhecer possibilidades <ArrowUpRight size={19}/></a></ShinyButton></div>
             {index===0&&<BorderBeam/>}
           </article>)}</div>
