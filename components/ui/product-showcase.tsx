@@ -24,28 +24,54 @@ export function ProductShowcase() {
       return;
     }
 
+    let isIntersecting = false;
+    let introComplete = !document.documentElement.hasAttribute("data-intro-active");
+    let observer: IntersectionObserver | undefined;
+    let introObserver: MutationObserver | undefined;
+
     const playOnce = () => {
       if (attemptedRef.current) return;
       attemptedRef.current = true;
+      observer?.disconnect();
+      introObserver?.disconnect();
       void video.play().catch(() => setShowFallback(true));
     };
 
-    if (!("IntersectionObserver" in window)) {
+    const tryToPlay = () => {
+      if (!isIntersecting || !introComplete) return;
       playOnce();
-      return;
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      isIntersecting = true;
+    } else {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          isIntersecting = Boolean(entry?.isIntersecting);
+          tryToPlay();
+        },
+        { rootMargin: "0px 0px -8%", threshold: 0.32 },
+      );
+
+      observer.observe(container);
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry?.isIntersecting) return;
-        observer.disconnect();
-        playOnce();
-      },
-      { rootMargin: "0px 0px -8%", threshold: 0.32 },
-    );
+    if (!introComplete) {
+      introObserver = new MutationObserver(() => {
+        introComplete = !document.documentElement.hasAttribute("data-intro-active");
+        tryToPlay();
+      });
+      introObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-intro-active"],
+      });
+    }
 
-    observer.observe(container);
-    return () => observer.disconnect();
+    tryToPlay();
+    return () => {
+      observer?.disconnect();
+      introObserver?.disconnect();
+    };
   }, []);
 
   return (
