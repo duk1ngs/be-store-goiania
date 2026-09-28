@@ -57,8 +57,8 @@ button{cursor:pointer}
 .product-showcase-final,.product-showcase-noscript{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:contain;object-position:center;opacity:0}
 .product-showcase-noscript{opacity:1}
 .product-showcase.is-complete .product-showcase-final{opacity:1}
-.product-showcase-stage{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch;background:#000}
-.product-0 .product-photo .product-showcase-device{position:relative;inset:auto;width:100%;height:100%;display:block;object-fit:contain;object-position:center;opacity:0;will-change:transform,opacity;backface-visibility:hidden;transform:translate3d(0,18px,0) scale(.965)}
+.product-showcase-stage{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch;background:transparent}
+.product-0 .product-photo .product-showcase-device{position:relative;inset:auto;width:100%;height:100%;display:block;object-fit:contain;object-position:center;opacity:0;will-change:transform,opacity;backface-visibility:hidden;mix-blend-mode:screen;transform:translate3d(0,18px,0) scale(.965)}
 .product-showcase.is-playing .product-showcase-device-0{animation:showcase-device-black 2.5s cubic-bezier(.16,1,.3,1) both}
 .product-showcase.is-playing .product-showcase-device-1{animation:showcase-device-silver 2.45s .34s cubic-bezier(.16,1,.3,1) both}
 .product-showcase.is-playing .product-showcase-device-2{animation:showcase-device-cherry 2.4s .68s cubic-bezier(.16,1,.3,1) both}
